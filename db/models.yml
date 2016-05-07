@@ -1,0 +1,4 @@
+Share
+  name: string
+  path: string
+  timestamp: datetime
