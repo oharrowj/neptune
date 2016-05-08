@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   post  '/share' => 'share#create' 
   get   '/share/:id' => 'share#show' 
 
+  get '*path' => 'error#invalid'
+
 end
