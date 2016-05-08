@@ -1,7 +1,7 @@
 class ErrorController < ApplicationController
 
   def invalid
-    render :xml => { "Error" => "Invalid URL" }, status: 404
+    render :xml => { "Error" => "Access Forbidden" }, status: 403
   end
 
 end
