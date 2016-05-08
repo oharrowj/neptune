@@ -2,30 +2,34 @@ class ShareController < ApplicationController
 
   def create
 
-    if params["filename"].blank?
-      render :xml => { "Error" => "Request could not be processed" }, status: 400
+    if params["key"].blank? || params["key"] != ENV["NEPTUNE_KEY"]
+      render :xml => { "Error" => "Unauthorized" }, status: 401
     else
-
-      filename = params["filename"] +".xml"
-      data = "<?xml version="+params["<?xml version"]
-      path = "/home/mercury/logs/"+filename
-
-      File.open(path, "w+") do |f|
-        f.write(data)
-      end
-
-      share = Share.find_by(:name => filename )
-      if share.blank?
-        share = Share.new
-      end
-      share.name = filename
-      share.path = path
-      share.timestamp = DateTime.now
-      if share.save
-        redirect_to root_url
-      else
-        File.delete(path) if File.exist?(path)
+      if params["filename"].blank?
         render :xml => { "Error" => "Request could not be processed" }, status: 400
+      else
+
+        filename = params["filename"] +".xml"
+        data = "<?xml version="+params["<?xml version"]
+        path = "/home/mercury/logs/"+filename
+
+        File.open(path, "w+") do |f|
+          f.write(data)
+        end
+
+        share = Share.find_by(:name => filename )
+        if share.blank?
+          share = Share.new
+        end
+        share.name = filename
+        share.path = path
+        share.timestamp = DateTime.now
+        if share.save
+          redirect_to root_url
+        else
+          File.delete(path) if File.exist?(path)
+          render :xml => { "Error" => "Request could not be processed" }, status: 400
+        end
       end
     end
   end
