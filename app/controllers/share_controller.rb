@@ -8,7 +8,7 @@ class ShareController < ApplicationController
         render :xml => { "Error" => "Request could not be processed" }, status: 400
       else
         filename = params["filename"] +".xml"
-        data = "<?xml version="+params["<?xml version"]
+        data = request.body.read
         path = "/home/mercury/logs/"+filename
 
         File.open(path, "w+") do |f|
